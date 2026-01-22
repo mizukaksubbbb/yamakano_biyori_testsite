@@ -11,264 +11,347 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* ===== reset ===== */
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{ margin:0; }
-
     :root{
-      --pad: clamp(18px, 2.4vw, 34px);
-      --max: 1160px;
+      /* you can tweak */
+      --bg: #cfdbe6;         /* スクショの薄いブルー寄せ */
+      --ink:#0b0b0c;         /* 文字 */
+      --muted: rgba(11,11,12,.72);
+      --line: rgba(11,11,12,.18);
 
-      --ink:#111;
-      --muted: rgba(0,0,0,.72);
-      --line: rgba(0,0,0,.28);
+      --wrap: 1040px;
+      --pad: 18px;
 
-      /* background color cycle */
-      --bgA: #5A8EC5;
-      --bgB: #CBD7E5;
-      --bgC: #C6C97E;
-      --bgD: #CBD7E5;
-      --bgE: #5A8EC5;
+      --r: 18px;
+      --pill: 999px;
 
-      --ticketBg: rgba(0,0,0,.06);
+      --navH: 44px;
     }
 
-    html{ scroll-behavior:smooth; }
-
-    /* ===== background: flat single-color that shifts ===== */
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
     body{
-      background: var(--bgA);
-      animation: bgCycle 10s linear infinite;
+      margin: 0;
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
       color: var(--ink);
-      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-weight: 700;
+      overflow-x: hidden; /* ページ全体の横はみ出しを防ぐ */
     }
 
-    @keyframes bgCycle{
-      0%   { background: var(--bgA); }
-      25%  { background: var(--bgB); }
-      50%  { background: var(--bgC); }
-      75%  { background: var(--bgD); }
-      100% { background: var(--bgE); }
-    }
+    a{ color: inherit; text-decoration: none; }
+    strong{ font-weight: 900; }
 
-    a{ color:inherit; text-decoration:none; }
-    a:hover{ text-decoration:underline; text-underline-offset:3px; }
-
+    /* ====== layout ====== */
     .wrap{
-      max-width: var(--max);
+      width: min(var(--wrap), 100%);
       margin: 0 auto;
-      padding: var(--pad);
+      padding: 0 var(--pad);
+      padding-top: 14px;
+      padding-bottom: 70px;
     }
 
-    /* ===== top nav (simple) ===== */
-    .topNav{
-      display:flex;
-      gap: 18px;
-      flex-wrap:wrap;
-      font-weight: 900;
-      letter-spacing: .02em;
+    .rule{
+      height: 1px;
+      background: var(--line);
+      margin: 22px 0;
+    }
+
+    .label{
+      font-size: 12px;
+      letter-spacing: .16em;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 12px;
       text-transform: uppercase;
-      font-size: 13px;
-      margin-bottom: 18px;
-    }
-    .topNav a{ opacity:.88; }
-    .topNav a:hover{ opacity:1; text-decoration:none; }
-
-    /* ===== hero header ===== */
-    header.hero{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      align-items:start;
-      padding-top: 8px;
     }
 
+    /* ====== floating ticket ====== */
+    .floatTicket{
+      position: fixed;
+      right: 14px;
+      bottom: 18vh; /* “上すぎる”対策で少し下に */
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      user-select: none;
+    }
+    .floatTicket .tag{
+      font-size: 12px;
+      letter-spacing: .16em;
+      color: rgba(11,11,12,.55);
+    }
+    .floatTicket a{
+      width: 220px;
+      height: 64px;
+      border-radius: var(--pill);
+      border: 1px solid rgba(11,11,12,.35);
+      background: rgba(255,255,255,.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      letter-spacing: .10em;
+      backdrop-filter: blur(6px);
+    }
+    @media (max-width: 560px){
+      .floatTicket{ right: 12px; bottom: 16vh; }
+      .floatTicket a{ width: 190px; height: 58px; font-size: 14px; }
+    }
+
+    /* ====== top nav ====== */
+    .topNav{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: var(--navH);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 10px 0;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid transparent;
+    }
+    .topNav a{
+      font-size: 12px;
+      letter-spacing: .12em;
+      font-weight: 700;
+      color: rgba(11,11,12,.72);
+      padding: 6px 8px;
+      border-radius: 10px;
+    }
+    .topNav a:hover{
+      background: rgba(255,255,255,.28);
+      color: rgba(11,11,12,.9);
+    }
+
+    /* ====== hero ====== */
+    .hero{
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+    }
     .brand .title{
       font-weight: 900;
-      letter-spacing: -0.03em;
-      font-size: clamp(44px, 5.4vw, 72px);
-      line-height: 1.00;
+      letter-spacing: .02em;
+      font-size: 54px;
+      line-height: 0.95;
       text-transform: uppercase;
     }
     .brand .sub{
       margin-top: 10px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      font-size: clamp(22px, 2.4vw, 32px);
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(11,11,12,.68);
+      letter-spacing: .12em;
     }
-
-    .meta{ text-align:right; }
+    .meta{
+      text-align: right;
+      padding-bottom: 8px;
+    }
     .meta .date{
+      font-size: 18px;
       font-weight: 900;
-      letter-spacing: -0.03em;
-      font-size: clamp(40px, 5.2vw, 72px);
-      line-height: 1.00;
+      letter-spacing: .06em;
     }
     .meta .place{
-      margin-top: 10px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      font-size: clamp(22px, 2.4vw, 32px);
-    }
-
-    /* ===== mobile/tablet: huge stacked wordmark ===== */
-    @media (max-width: 860px){
-      header.hero{ grid-template-columns: 1fr; }
-      .meta{ text-align:left; }
-
-      /* 指定：「yamakano / biyori / 2026」が画面の半分を埋めるくらい */
-      .brand .title{
-        font-size: min(20vw, 110px);
-        line-height: .96;
-      }
-      .brand .sub{
-        font-size: min(10vw, 52px);
-      }
-    }
-
-    .intro{
-      margin-top: 18px;
-      max-width: 980px;
-      display:grid;
-      gap: 14px;
-      font-size: 15px;
-      line-height: 2.0;
+      margin-top: 6px;
+      font-size: 12px;
+      letter-spacing: .12em;
+      color: rgba(11,11,12,.65);
       font-weight: 700;
-      color: rgba(0,0,0,.78);
     }
-    .intro strong{ font-weight: 900; color:#111; }
 
+    @media (max-width: 720px){
+      .hero{ grid-template-columns: 1fr; }
+      .meta{ text-align: left; }
+      .brand .title{ font-size: 44px; }
+    }
+
+    /* ====== intro / big ====== */
+    .intro{
+      margin-top: 16px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(11,11,12,.8);
+    }
     .big{
-      margin-top: 30px;
+      margin-top: 16px;
       font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1.02;
-      font-size: clamp(44px, 6.4vw, 96px);
+      letter-spacing: .08em;
+      font-size: 22px;
+      line-height: 1.25;
       text-transform: uppercase;
     }
 
-    .rule{
-      margin-top: 14px;
-      border-top: 2px solid rgba(0,0,0,.75);
-    }
-
+    /* ====== twoCol ====== */
     .twoCol{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 24px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
     }
     @media (max-width: 860px){
-      .twoCol{ grid-template-columns:1fr; }
+      .twoCol{ grid-template-columns: 1fr; }
     }
 
-    .label{
-      font-size: 13px;
+    .eventRows{
+      display: grid;
+      gap: 10px;
+      padding-top: 4px;
+    }
+    .row{
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 10px;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(11,11,12,.10);
+    }
+    .row:last-child{ border-bottom: none; }
+    .row .k{
       font-weight: 900;
-      letter-spacing: .14em;
+      letter-spacing: .10em;
       text-transform: uppercase;
-      color: rgba(0,0,0,.68);
-      margin-bottom: 12px;
     }
-
-    .eventRows{ display:flex; flex-direction:column; gap: 10px; }
-    .row{ display:flex; gap: 16px; align-items:baseline; font-weight: 900; letter-spacing: -0.02em; line-height:1.05; }
-    .row .k{ width: 110px; font-size: clamp(22px, 3.0vw, 36px); }
-    .row .v{ font-size: clamp(22px, 3.0vw, 36px); text-transform: uppercase; }
+    .row .v{
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
 
     .venueTitle{
+      margin: 0 0 8px;
       font-weight: 900;
-      letter-spacing: -0.02em;
-      font-size: clamp(22px, 2.8vw, 38px);
-      margin:0;
+      letter-spacing: .06em;
       text-transform: uppercase;
     }
     .venueText{
-      margin-top: 10px;
-      font-size: 15px;
-      line-height: 1.9;
-      font-weight: 700;
-      color: rgba(0,0,0,.78);
-      white-space: pre-wrap;
-    }
-
-    .pillRow{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 12px 16px;
-      border-radius: 999px;
-      border: 1.8px solid rgba(0,0,0,.80);
-      background: rgba(255,255,255,.10);
-      font-weight: 900;
-      letter-spacing: .02em;
       font-size: 13px;
-      text-transform: uppercase;
-      text-decoration:none !important;
+      line-height: 1.8;
+      color: rgba(11,11,12,.75);
+      white-space: pre-line;
     }
-    .pill:hover{ background: rgba(255,255,255,.18); }
 
-    /* ===== CONCEPT (JP vertical + EN) ===== */
+    .pillRow{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .pill{
+      border: 1px solid rgba(11,11,12,.25);
+      background: rgba(255,255,255,.22);
+      border-radius: var(--pill);
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+
+    /* ====== CONCEPT ====== */
     .conceptWrap{
-      margin-top: 18px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 22px;
+      margin-top: 10px;
     }
     .conceptGrid{
-      display:grid;
+      display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 26px;
-      padding: 18px 0 4px;
+      gap: 18px;
+      align-items: start;
     }
     @media (max-width: 860px){
-      .conceptGrid{ grid-template-columns:1fr; }
+      .conceptGrid{ grid-template-columns: 1fr; }
     }
 
     .vblock{
-      border-top: 1px solid var(--line);
-      padding-top: 12px;
+      border: 1px solid rgba(11,11,12,.16);
+      border-radius: var(--r);
+      padding: 14px;
+      background: rgba(255,255,255,.16);
     }
     .vtitle{
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
       letter-spacing: .14em;
+      color: rgba(11,11,12,.6);
+      margin-bottom: 10px;
       text-transform: uppercase;
-      color: rgba(0,0,0,.68);
-      margin-bottom: 12px;
     }
 
-    /* mobileでも縦書き維持 */
+    /* ✅ ここが修正点：縦書きを “枠内横スクロール” に閉じ込める */
+    .vframe{
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;                 /* ページ全体を広げない */
+      border: 1px solid rgba(11,11,12,.12);
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(255,255,255,.12);
+    }
+    .vscroll{
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;                 /* 枠内だけ横スクロール */
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-gutter: stable both-edges;
+      padding-bottom: 8px;              /* スクロールバー分 */
+    }
+    .vscroll::-webkit-scrollbar{ height: 8px; }
+    .vscroll::-webkit-scrollbar-thumb{
+      background: rgba(11,11,12,.22);
+      border-radius: 999px;
+    }
+    .vscroll::-webkit-scrollbar-track{
+      background: rgba(11,11,12,.06);
+      border-radius: 999px;
+    }
+
     .vertical{
+      /* 縦書きそのもの */
       writing-mode: vertical-rl;
       text-orientation: mixed;
-      line-height: 2.0;
-      letter-spacing: .03em;
+
+      /* 重要：中身幅で伸びる → vscrollが横スクロール */
+      display: inline-block;
+      max-width: none;
+
+      font-size: 14px;
+      line-height: 1.9;
+      letter-spacing: .08em;
+      color: rgba(11,11,12,.88);
+      user-select: text;
+      padding: 6px 4px;
+      min-height: 260px;
+    }
+    .vertical i{
+      font-style: italic;
+      color: rgba(11,11,12,.72);
       font-weight: 700;
-      font-size: 16px;
-      color: rgba(0,0,0,.82);
-      max-height: 640px;
-      overflow:auto;
-      padding-right: 10px;
     }
 
     .english{
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 2.0;
-      color: rgba(0,0,0,.82);
-      letter-spacing: .01em;
-      max-width: 900px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(11,11,12,.78);
+    }
+    .english i{
+      color: rgba(11,11,12,.70);
+      font-style: italic;
     }
 
-    /* ===== Concept image block (under concept) ===== */
+    /* concept image */
     .conceptImage{
-      margin-top: 18px;
-      padding: 18px 0 22px;
-      border-bottom: 1px solid var(--line);
+      margin-top: 14px;
+      border: 1px solid rgba(11,11,12,.16);
+      border-radius: var(--r);
+      overflow: hidden;
+      background: rgba(255,255,255,.14);
     }
     .conceptImage img{
       width: 100%;
@@ -276,220 +359,189 @@
       display: block;
     }
 
-    /* ===== ARTISTS section ===== */
+    /* ====== ARTISTS ====== */
     .artistsHeader{
-      margin-top: 20px;
-      display:flex;
-      justify-content:space-between;
-      gap: 16px;
-      align-items:flex-end;
-      flex-wrap:wrap;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 12px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
     .artistsHeader h2{
-      margin:0;
+      margin: 0;
+      font-size: 22px;
       font-weight: 900;
-      letter-spacing: -0.02em;
-      font-size: clamp(40px, 5vw, 76px);
+      letter-spacing: .10em;
       text-transform: uppercase;
-      line-height: 1.0;
     }
-
     .filters{
-      display:flex;
-      gap: 10px;
-      flex-wrap:wrap;
-      align-items:center;
-      font-weight: 900;
-      text-transform: uppercase;
-      font-size: 13px;
-      letter-spacing: .02em;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .fbtn{
-      border-radius: 999px;
-      border: 1.8px solid rgba(0,0,0,.78);
-      background: rgba(255,255,255,.10);
-      padding: 10px 12px;
-      cursor:pointer;
-      font: inherit;
+      border: 1px solid rgba(11,11,12,.25);
+      border-radius: var(--pill);
+      padding: 9px 12px;
+      font-size: 12px;
       font-weight: 900;
+      letter-spacing: .10em;
+      background: rgba(255,255,255,.20);
+      cursor: pointer;
     }
     .fbtn[aria-pressed="true"]{
-      background: rgba(0,0,0,.10);
+      background: rgba(11,11,12,.85);
+      color: #fff;
+      border-color: rgba(11,11,12,.85);
     }
 
     .cards{
-      margin-top: 16px;
-      display:grid;
+      margin-top: 14px;
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
+      gap: 12px;
     }
-    @media (max-width: 980px){
+    @media (max-width: 960px){
       .cards{ grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 640px){
+    @media (max-width: 560px){
       .cards{ grid-template-columns: 1fr; }
     }
 
     .card{
-      border: 1px solid rgba(0,0,0,.26);
-      background: rgba(255,255,255,.08);
-      padding: 14px 14px 12px;
-      min-height: 150px;
-      display:flex;
-      flex-direction:column;
+      border: 1px solid rgba(11,11,12,.16);
+      border-radius: var(--r);
+      padding: 14px;
+      background: rgba(255,255,255,.16);
+      display: grid;
       gap: 10px;
+      min-height: 140px;
     }
     .cardTop{
-      display:flex;
-      justify-content:space-between;
+      display: flex;
+      justify-content: space-between;
       gap: 10px;
-      align-items:baseline;
-      border-bottom: 1px solid rgba(0,0,0,.18);
-      padding-bottom: 8px;
-      text-transform: uppercase;
+      font-size: 11px;
       font-weight: 900;
-      letter-spacing: .02em;
-      font-size: 12px;
-      color: rgba(0,0,0,.78);
+      letter-spacing: .12em;
+      color: rgba(11,11,12,.6);
+      text-transform: uppercase;
     }
     .cardName{
+      font-size: 16px;
       font-weight: 900;
-      letter-spacing: -0.01em;
-      font-size: 20px;
-      line-height: 1.25;
+      letter-spacing: .02em;
     }
     .cardName small{
-      display:block;
       font-weight: 700;
-      font-size: 14px;
-      color: rgba(0,0,0,.78);
-      letter-spacing: .01em;
-      margin-top: 4px;
+      color: rgba(11,11,12,.65);
     }
     .cardLink{
-      margin-top: auto;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .02em;
       font-size: 12px;
-      opacity: .85;
+      font-weight: 900;
+      letter-spacing: .10em;
+      color: rgba(11,11,12,.78);
+      text-transform: uppercase;
     }
+    .cardLink:hover{ text-decoration: underline; }
 
-    /* ===== TICKET section (after artists) ===== */
+    /* ====== Ticket section ====== */
     .ticketSection{
       margin-top: 18px;
-      padding: 18px 0 22px;
-      border-bottom: 1px solid var(--line);
+      border: 1px solid rgba(11,11,12,.16);
+      border-radius: var(--r);
+      padding: 14px;
+      background: rgba(255,255,255,.16);
     }
     .ticketCta{
-      margin-top: 14px;
-      display:flex;
-      align-items:center;
-      gap: 14px;
-      flex-wrap:wrap;
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
     }
     .ticketBig{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border-radius: 999px;
-      border: 2px solid rgba(0,0,0,.85);
-      background: rgba(0,0,0,.06);
-      padding: 16px 22px;
-      font-weight: 900;
-      /* 1.5倍（元: clamp(26px,4vw,64px)） */
-      font-size: clamp(39px, 6vw, 96px);
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      text-decoration:none !important;
-      transition: transform .15s ease, background .15s ease;
-    }
-    .ticketBig:hover{
-      transform: translateY(-2px);
-      background: rgba(0,0,0,.10);
-    }
-
-    /* ===== map ===== */
-    .map{
-      width:100%;
-      height: 360px;
-      border:0;
-      display:block;
-      margin-top: 10px;
-      filter: saturate(.98) contrast(1.05);
-    }
-
-    /* ===== floating ticket (always, and dims if overlaps) ===== */
-    .floatTicket{
-      position: fixed;
-      right: clamp(14px, 2vw, 22px);
-      /* 指定：今の半分くらいの高さ（25vh -> 12.5vh） */
-      bottom: 12.5vh;
-      z-index: 9999;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      align-items:flex-end;
-      pointer-events: auto;
-      transition: opacity .18s ease, transform .18s ease, filter .18s ease;
-    }
-    .floatTicket.dim{
-      opacity: .28;
-      filter: blur(.2px);
-      transform: translateY(1px);
-    }
-
-    .floatTicket .tag{
-      font-size: 20px;
+      border: 1px solid rgba(11,11,12,.30);
+      border-radius: var(--pill);
+      background: rgba(255,255,255,.22);
+      padding: 18px 22px;
       font-weight: 900;
       letter-spacing: .12em;
       text-transform: uppercase;
-      opacity:.60;
-      user-select:none;
-    }
-    .floatTicket a{
-      border-radius: 999px;
-      border: 2px solid rgba(0,0,0,.85);
-      background: var(--ticketBg);
-      padding: 18px 22px;
-      font-weight: 900;
-      font-size: clamp(26px, 3.4vw, 54px);
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      text-decoration:none !important;
-      transition: transform .15s ease, background .15s ease;
-    }
-    .floatTicket a:hover{
-      transform: translateY(-2px);
-      background: rgba(0,0,0,.10);
+      font-size: 18px; /* 1.5倍相当 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 220px;
     }
 
+    /* ====== map ====== */
+    .map{
+      width: 100%;
+      height: 420px;
+      border: 0;
+      border-radius: var(--r);
+      margin-top: 12px;
+      box-shadow: 0 0 0 1px rgba(11,11,12,.12) inset;
+      background: rgba(255,255,255,.10);
+    }
+    @media (max-width: 560px){
+      .map{ height: 320px; }
+    }
+
+    /* ====== footer ====== */
     footer{
-      margin-top: 26px;
-      padding-top: 18px;
+      margin-top: 18px;
+      padding-top: 14px;
       border-top: 1px solid var(--line);
-      color: rgba(0,0,0,.68);
-      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: rgba(11,11,12,.62);
       font-size: 12px;
-      line-height: 1.7;
-      padding-bottom: 110px; /* keep space for floating button area */
-      display:flex;
-      flex-wrap:wrap;
-      gap: 10px 14px;
-      align-items:center;
+      letter-spacing: .08em;
+      font-weight: 700;
     }
     footer .ig{
-      font-weight: 900;
-      letter-spacing: .02em;
+      padding: 8px 10px;
+      border: 1px solid rgba(11,11,12,.18);
+      border-radius: var(--pill);
+      background: rgba(255,255,255,.18);
       text-transform: uppercase;
-      opacity: .9;
-      text-decoration:none;
+      letter-spacing: .12em;
+      font-weight: 900;
+      color: rgba(11,11,12,.75);
     }
-    footer .ig:hover{ text-decoration:underline; text-underline-offset:3px; }
+
+    /* ===== Hero title responsive split ===== */
+
+/* デフォルト（PC）：YAMAKANO を1行表示 */
+.yamano-split{
+  display: none;
+}
+.yamano-inline{
+  display: inline;
+}
+
+/* 狭い画面だけ分割 */
+@media (max-width: 420px){
+  .yamano-inline{
+    display: none;
+  }
+  .yamano-split{
+    display: inline;
+  }
+
+  /* 念のため文字サイズも微調整（はみ出し防止） */
+  .brand .title{
+    font-size: 46px;
+    line-height: 0.98;
+  }
+}
+
   </style>
 </head>
 
@@ -513,15 +565,16 @@
 
     <header class="hero" id="about">
       <div class="brand">
-        <div class="title">
-          YAMAKANO<br>BIYORI<br>2026
-        </div>
-        <div class="sub">山叶日和</div>
-      </div>
-      <div class="meta">
-        <div class="date">2026.04.25</div>
-        <div class="place">旧山叶工場 / 富士吉田市</div>
-      </div>
+  <div class="title">
+    <span class="yamano-inline">YAMAKANO</span>
+    <span class="yamano-split">
+      YAMA<br>KANO
+    </span><br>
+    BIYORI<br>
+    2026
+  </div>
+  <div class="sub">山叶日和</div>
+</div>
     </header>
 
     <section class="intro">
@@ -569,7 +622,10 @@
         <div class="vblock">
           <div class="vtitle">/ CONCEPT / JP (VERTICAL)</div>
 
-          <div class="vertical">
+          <!-- ✅ 枠内スクロール化（ページ全体を横に広げない） -->
+          <div class="vframe" aria-label="Concept JP vertical frame">
+            <div class="vscroll" aria-label="Concept JP vertical scroll area">
+              <div class="vertical">
 かつて富士吉田の街のいたるところに響いていた機織りの音。<br />
 それは、単なる産業の音ではなく、<br />人々の暮らしのリズムであり、地域の　時間　そのものでした。<br />
 織物産業が栄える上で重要な自然の音、<br />戦後産業を象徴する織機の音、<br />様々な音が交差する地点で始まる音楽祭。<br />
@@ -584,7 +640,11 @@
 人と、音楽と、山叶の歴史が出会ったときに何が起こるか。<br />
 その日の空気や成り行きに身をゆだねる。<br />
 </i>
+              </div>
+            </div>
           </div>
+          <!-- /枠内スクロール化 -->
+
         </div>
 
         <div class="vblock">
@@ -604,9 +664,8 @@
       </div>
     </section>
 
-    <!-- CONCEPT IMAGE (insert the attached png here) -->
+    <!-- CONCEPT IMAGE -->
     <section class="conceptImage" aria-label="Concept Image">
-      <!-- NOTE: index.htmlと同じ階層に yamakanoimage_kari.png を置く -->
       <img src="yamakanoimage_kari.png" alt="yamakano biyori image">
     </section>
 
@@ -615,9 +674,9 @@
       <div class="artistsHeader">
         <h2>ARTISTS</h2>
         <div class="filters" role="group" aria-label="Filters">
-          <button class="fbtn" data-filter="all" aria-pressed="true">ALL</button>
-          <button class="fbtn" data-filter="dj" aria-pressed="false">DJ / LIVE</button>
-          <button class="fbtn" data-filter="workshop" aria-pressed="false">WORKSHOP</button>
+          <button class="fbtn" data-filter="all" aria-pressed="true" type="button">ALL</button>
+          <button class="fbtn" data-filter="dj" aria-pressed="false" type="button">DJ / LIVE</button>
+          <button class="fbtn" data-filter="workshop" aria-pressed="false" type="button">WORKSHOP</button>
         </div>
       </div>
 
@@ -668,7 +727,7 @@
       </div>
     </section>
 
-    <!-- TICKET section after artists (no PEATIX pill) -->
+    <!-- TICKET -->
     <section id="ticket" class="ticketSection">
       <div class="label">/ TICKET</div>
       <div class="venueText">チケットはPEATIXにて販売予定。</div>
@@ -700,89 +759,34 @@
   </main>
 
   <script>
-    // ===== ARTISTS filter buttons =====
-    const buttons = Array.from(document.querySelectorAll('.fbtn'));
-    const cards = Array.from(document.querySelectorAll('.card'));
+    // ===== Artists filter (script.js integrated) =====
+    (function(){
+      const buttons = Array.from(document.querySelectorAll('.fbtn'));
+      const cards = Array.from(document.querySelectorAll('#cards .card'));
 
-    function setPressed(active){
-      buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === active)));
-    }
-    function applyFilter(filter){
-      cards.forEach(c => {
-        const type = c.dataset.type;
-        const show = (filter === 'all') || (type === filter);
-        c.style.display = show ? '' : 'none';
-      });
-    }
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.dataset.filter;
-        setPressed(filter);
-        applyFilter(filter);
-      });
-    });
-
-    // ===== Floating BUY TICKET: dim when overlaps content =====
-    const floatTicket = document.getElementById('floatTicket');
-    const overlapTargets = [
-      document.getElementById('ticket'),
-      document.getElementById('access'),
-      document.getElementById('footer')
-    ].filter(Boolean);
-
-    let ticking = false;
-
-    function rectsOverlap(a, b){
-      return !(
-        a.right < b.left ||
-        a.left > b.right ||
-        a.bottom < b.top ||
-        a.top > b.bottom
-      );
-    }
-
-    function updateFloatDim(){
-      if (!floatTicket) return;
-      const ft = floatTicket.getBoundingClientRect();
-
-      // 画面外にあるときは普通に戻す（念のため）
-      if (ft.bottom < 0 || ft.top > window.innerHeight){
-        floatTicket.classList.remove('dim');
-        return;
+      function setPressed(activeBtn){
+        buttons.forEach(btn => btn.setAttribute('aria-pressed', btn === activeBtn ? 'true' : 'false'));
       }
 
-      // “実際に重なったら” dim
-      let isOverlapping = false;
-      for (const el of overlapTargets){
-        const r = el.getBoundingClientRect();
-
-        // ざっくり表示領域に入ってるターゲットだけ判定
-        const visible = !(r.bottom < 0 || r.top > window.innerHeight);
-        if (!visible) continue;
-
-        if (rectsOverlap(ft, r)){
-          isOverlapping = true;
-          break;
-        }
+      function applyFilter(type){
+        cards.forEach(card => {
+          const t = card.getAttribute('data-type');
+          const show = (type === 'all') || (t === type);
+          card.style.display = show ? '' : 'none';
+        });
       }
 
-      floatTicket.classList.toggle('dim', isOverlapping);
-    }
-
-    function onScrollOrResize(){
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        updateFloatDim();
-        ticking = false;
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const f = btn.getAttribute('data-filter') || 'all';
+          setPressed(btn);
+          applyFilter(f);
+        });
       });
-    }
 
-    window.addEventListener('scroll', onScrollOrResize, { passive: true });
-    window.addEventListener('resize', onScrollOrResize);
-
-    // 初回
-    updateFloatDim();
+      // initial
+      applyFilter('all');
+    })();
   </script>
 </body>
 </html>
