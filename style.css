@@ -1,0 +1,479 @@
+/* ===== reset ===== */
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{ margin:0; }
+
+    :root{
+      --pad: clamp(18px, 2.4vw, 34px);
+      --max: 1160px;
+
+      --ink:#111;
+      --muted: rgba(0,0,0,.72);
+      --line: rgba(0,0,0,.28);
+
+      /* background color cycle */
+      --bgA: #5A8EC5;
+      --bgB: #CBD7E5;
+      --bgC: #C6C97E;
+      --bgD: #CBD7E5;
+      --bgE: #5A8EC5;
+
+      --ticketBg: rgba(0,0,0,.06);
+    }
+
+    html{ scroll-behavior:smooth; }
+
+    /* ===== background: flat single-color that shifts ===== */
+    body{
+      background: var(--bgA);
+      animation: bgCycle 10s linear infinite;
+      color: var(--ink);
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 700;
+    }
+
+    @keyframes bgCycle{
+      0%   { background: var(--bgA); }
+      25%  { background: var(--bgB); }
+      50%  { background: var(--bgC); }
+      75%  { background: var(--bgD); }
+      100% { background: var(--bgE); }
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; text-underline-offset:3px; }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: var(--pad);
+    }
+
+    /* ===== top nav (simple) ===== */
+    .topNav{
+      display:flex;
+      gap: 18px;
+      flex-wrap:wrap;
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    .topNav a{ opacity:.88; }
+    .topNav a:hover{ opacity:1; text-decoration:none; }
+
+    /* ===== hero header ===== */
+    header.hero{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items:start;
+      padding-top: 8px;
+    }
+
+    .brand .title{
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      font-size: clamp(44px, 5.4vw, 72px);
+      line-height: 1.00;
+      text-transform: uppercase;
+    }
+    .brand .sub{
+      margin-top: 10px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      font-size: clamp(22px, 2.4vw, 32px);
+    }
+
+    .meta{ text-align:right; }
+    .meta .date{
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      font-size: clamp(40px, 5.2vw, 72px);
+      line-height: 1.00;
+    }
+    .meta .place{
+      margin-top: 10px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      font-size: clamp(22px, 2.4vw, 32px);
+    }
+
+    /* ===== mobile/tablet: huge stacked wordmark ===== */
+    @media (max-width: 860px){
+      header.hero{ grid-template-columns: 1fr; }
+      .meta{ text-align:left; }
+
+      /* 指定：「yamakano / biyori / 2026」が画面の半分を埋めるくらい */
+      .brand .title{
+        font-size: min(20vw, 110px);
+        line-height: .96;
+      }
+      .brand .sub{
+        font-size: min(10vw, 52px);
+      }
+    }
+
+    .intro{
+      margin-top: 18px;
+      max-width: 980px;
+      display:grid;
+      gap: 14px;
+      font-size: 15px;
+      line-height: 2.0;
+      font-weight: 700;
+      color: rgba(0,0,0,.78);
+    }
+    .intro strong{ font-weight: 900; color:#111; }
+
+    .big{
+      margin-top: 30px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+      font-size: clamp(44px, 6.4vw, 96px);
+      text-transform: uppercase;
+    }
+
+    .rule{
+      margin-top: 14px;
+      border-top: 2px solid rgba(0,0,0,.75);
+    }
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    @media (max-width: 860px){
+      .twoCol{ grid-template-columns:1fr; }
+    }
+
+    .label{
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.68);
+      margin-bottom: 12px;
+    }
+
+    .eventRows{ display:flex; flex-direction:column; gap: 10px; }
+    .row{ display:flex; gap: 16px; align-items:baseline; font-weight: 900; letter-spacing: -0.02em; line-height:1.05; }
+    .row .k{ width: 110px; font-size: clamp(22px, 3.0vw, 36px); }
+    .row .v{ font-size: clamp(22px, 3.0vw, 36px); text-transform: uppercase; }
+
+    .venueTitle{
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      font-size: clamp(22px, 2.8vw, 38px);
+      margin:0;
+      text-transform: uppercase;
+    }
+    .venueText{
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.9;
+      font-weight: 700;
+      color: rgba(0,0,0,.78);
+      white-space: pre-wrap;
+    }
+
+    .pillRow{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1.8px solid rgba(0,0,0,.80);
+      background: rgba(255,255,255,.10);
+      font-weight: 900;
+      letter-spacing: .02em;
+      font-size: 13px;
+      text-transform: uppercase;
+      text-decoration:none !important;
+    }
+    .pill:hover{ background: rgba(255,255,255,.18); }
+
+    /* ===== CONCEPT (JP vertical + EN) ===== */
+    .conceptWrap{
+      margin-top: 18px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 22px;
+    }
+    .conceptGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      padding: 18px 0 4px;
+    }
+    @media (max-width: 860px){
+      .conceptGrid{ grid-template-columns:1fr; }
+    }
+
+    .vblock{
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+    .vtitle{
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.68);
+      margin-bottom: 12px;
+    }
+
+    /* mobileでも縦書き維持 */
+    .vertical{
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      line-height: 2.0;
+      letter-spacing: .03em;
+      font-weight: 700;
+      font-size: 16px;
+      color: rgba(0,0,0,.82);
+      max-height: 640px;
+      overflow:auto;
+      padding-right: 10px;
+    }
+
+    .english{
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 2.0;
+      color: rgba(0,0,0,.82);
+      letter-spacing: .01em;
+      max-width: 900px;
+    }
+
+    /* ===== Concept image block (under concept) ===== */
+    .conceptImage{
+      margin-top: 18px;
+      padding: 18px 0 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .conceptImage img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ===== ARTISTS section ===== */
+    .artistsHeader{
+      margin-top: 20px;
+      display:flex;
+      justify-content:space-between;
+      gap: 16px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+    .artistsHeader h2{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      font-size: clamp(40px, 5vw, 76px);
+      text-transform: uppercase;
+      line-height: 1.0;
+    }
+
+    .filters{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: .02em;
+    }
+    .fbtn{
+      border-radius: 999px;
+      border: 1.8px solid rgba(0,0,0,.78);
+      background: rgba(255,255,255,.10);
+      padding: 10px 12px;
+      cursor:pointer;
+      font: inherit;
+      font-weight: 900;
+    }
+    .fbtn[aria-pressed="true"]{
+      background: rgba(0,0,0,.10);
+    }
+
+    .cards{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    @media (max-width: 980px){
+      .cards{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px){
+      .cards{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border: 1px solid rgba(0,0,0,.26);
+      background: rgba(255,255,255,.08);
+      padding: 14px 14px 12px;
+      min-height: 150px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .cardTop{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:baseline;
+      border-bottom: 1px solid rgba(0,0,0,.18);
+      padding-bottom: 8px;
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: .02em;
+      font-size: 12px;
+      color: rgba(0,0,0,.78);
+    }
+    .cardName{
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+    .cardName small{
+      display:block;
+      font-weight: 700;
+      font-size: 14px;
+      color: rgba(0,0,0,.78);
+      letter-spacing: .01em;
+      margin-top: 4px;
+    }
+    .cardLink{
+      margin-top: auto;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      font-size: 12px;
+      opacity: .85;
+    }
+
+    /* ===== TICKET section (after artists) ===== */
+    .ticketSection{
+      margin-top: 18px;
+      padding: 18px 0 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .ticketCta{
+      margin-top: 14px;
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .ticketBig{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,.85);
+      background: rgba(0,0,0,.06);
+      padding: 16px 22px;
+      font-weight: 900;
+      /* 1.5倍（元: clamp(26px,4vw,64px)） */
+      font-size: clamp(39px, 6vw, 96px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration:none !important;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .ticketBig:hover{
+      transform: translateY(-2px);
+      background: rgba(0,0,0,.10);
+    }
+
+    /* ===== map ===== */
+    .map{
+      width:100%;
+      height: 360px;
+      border:0;
+      display:block;
+      margin-top: 10px;
+      filter: saturate(.98) contrast(1.05);
+    }
+
+    /* ===== floating ticket (always, and dims if overlaps) ===== */
+    .floatTicket{
+      position: fixed;
+      right: clamp(14px, 2vw, 22px);
+      /* 指定：今の半分くらいの高さ（25vh -> 12.5vh） */
+      bottom: 12.5vh;
+      z-index: 9999;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      align-items:flex-end;
+      pointer-events: auto;
+      transition: opacity .18s ease, transform .18s ease, filter .18s ease;
+    }
+    .floatTicket.dim{
+      opacity: .28;
+      filter: blur(.2px);
+      transform: translateY(1px);
+    }
+
+    .floatTicket .tag{
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity:.60;
+      user-select:none;
+    }
+    .floatTicket a{
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,.85);
+      background: var(--ticketBg);
+      padding: 18px 22px;
+      font-weight: 900;
+      font-size: clamp(26px, 3.4vw, 54px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration:none !important;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .floatTicket a:hover{
+      transform: translateY(-2px);
+      background: rgba(0,0,0,.10);
+    }
+
+    footer{
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: rgba(0,0,0,.68);
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 1.7;
+      padding-bottom: 110px; /* keep space for floating button area */
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px 14px;
+      align-items:center;
+    }
+    footer .ig{
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      opacity: .9;
+      text-decoration:none;
+    }
+    footer .ig:hover{ text-decoration:underline; text-underline-offset:3px; }

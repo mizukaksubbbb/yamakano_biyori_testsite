@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>yamakano biyori</title>
+
+  <!-- Noto Sans JP (Black=900) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- floating ticket -->
+  <div class="floatTicket" id="floatTicket" aria-label="Ticket">
+    <div class="tag">/ Peatix</div>
+    <!-- TODO: ここをイベントのPEATIX URLに差し替え -->
+    <a href="https://peatix.com/" target="_blank" rel="noopener">BUY TICKET</a>
+  </div>
+
+  <main class="wrap">
+    <nav class="topNav" aria-label="Primary">
+      <a href="#about">ABOUT</a>
+      <a href="#details">EVENT DETAILS</a>
+      <a href="#concept">CONCEPT</a>
+      <a href="#artists">ARTISTS</a>
+      <a href="#ticket">TICKET</a>
+      <a href="#access">ACCESS</a>
+    </nav>
+
+    <header class="hero" id="about">
+      <div class="brand">
+        <div class="title">
+          YAMAKANO<br>BIYORI<br>2026
+        </div>
+        <div class="sub">山叶日和</div>
+      </div>
+      <div class="meta">
+        <div class="date">2026.04.25</div>
+        <div class="place">旧山叶工場 / 富士吉田市</div>
+      </div>
+    </header>
+
+    <section class="intro">
+      <div>
+        <strong>開催概要</strong><br>
+        【クレジット】主催/企画/制作：山叶日和 実行委員会　協力：富士吉田市
+      </div>
+    </section>
+
+    <div class="big">
+      YAMAKANO BIYORI 2026<br>
+      / MUSIC FESTIVAL
+    </div>
+
+    <div class="rule"></div>
+
+    <!-- EVENT DETAILS -->
+    <section id="details" class="twoCol">
+      <div>
+        <div class="label">/ EVENT DETAILS</div>
+        <div class="eventRows">
+          <div class="row"><div class="k">04.25</div><div class="v">SAT</div></div>
+          <div class="row"><div class="k">OPEN</div><div class="v">12:00</div></div>
+          <div class="row"><div class="k">CLOSE</div><div class="v">20:00</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="label">/ VENUE</div>
+        <h3 class="venueTitle">VENUE - 旧山叶工場</h3>
+        <div class="venueText">【会場】旧山叶工場（富士吉田市）</div>
+
+        <div class="pillRow">
+          <a class="pill" href="#access">GOOGLE MAP</a>
+          <a class="pill" href="#artists">ARTISTS</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONCEPT -->
+    <section id="concept" class="conceptWrap">
+      <div class="label">/ CONCEPT</div>
+
+      <div class="conceptGrid">
+        <div class="vblock">
+          <div class="vtitle">/ CONCEPT / JP (VERTICAL)</div>
+
+          <div class="vertical">
+かつて富士吉田の街のいたるところに響いていた機織りの音。<br />
+それは、単なる産業の音ではなく、<br />人々の暮らしのリズムであり、地域の　時間　そのものでした。<br />
+織物産業が栄える上で重要な自然の音、<br />戦後産業を象徴する織機の音、<br />様々な音が交差する地点で始まる音楽祭。<br />
+この音楽祭は「音」を媒介に「地域」を体験する場に、<br />みんなでしていく場所です。<br />
+<br />
+<br />
+<i>
+日和（ひより）とは：<br />
+何かをするのにちょうどよい天気。<br />
+なりゆき。<br />
+開催時期の春の芽吹き感。<br />
+人と、音楽と、山叶の歴史が出会ったときに何が起こるか。<br />
+その日の空気や成り行きに身をゆだねる。<br />
+</i>
+          </div>
+        </div>
+
+        <div class="vblock">
+          <div class="vtitle">/ CONCEPT / EN</div>
+          <div class="english">
+            The sound of looms once echoed throughout Fujiyoshida.
+            It was not merely the sound of industry, but the rhythm of daily life—time itself in the region.
+            A festival begins at the intersection of many sounds: the natural sounds essential to the growth of textile culture, the looms that symbolized postwar industry, and everything in between.
+            This festival is a place we build together—where we experience the region through sound.<br /><br />
+
+            <i>“Hiyori” means the kind of weather that feels just right for doing something—and also, letting things unfold.
+            It carries the sense of spring’s first stirrings.
+            What happens when people, music, and the history of Yamakano meet?
+            We entrust ourselves to the air of the day, and to the way things naturally take shape.</i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONCEPT IMAGE (insert the attached png here) -->
+    <section class="conceptImage" aria-label="Concept Image">
+      <!-- NOTE: index.htmlと同じ階層に yamakanoimage_kari.png を置く -->
+      <img src="yamakanoimage_kari.png" alt="yamakano biyori image">
+    </section>
+
+    <!-- ARTISTS -->
+    <section id="artists" style="margin-top:20px;">
+      <div class="artistsHeader">
+        <h2>ARTISTS</h2>
+        <div class="filters" role="group" aria-label="Filters">
+          <button class="fbtn" data-filter="all" aria-pressed="true">ALL</button>
+          <button class="fbtn" data-filter="dj" aria-pressed="false">DJ / LIVE</button>
+          <button class="fbtn" data-filter="workshop" aria-pressed="false">WORKSHOP</button>
+        </div>
+      </div>
+
+      <div class="cards" id="cards">
+        <!-- DJ / LIVE (mainstage) -->
+        <article class="card" data-type="dj">
+          <div class="cardTop"><span>DJ / LIVE</span><span>MAINSTAGE</span></div>
+          <div class="cardName">田中堅大 <small>(Kenta Tanaka)</small></div>
+          <a class="cardLink" href="https://www.instagram.com/kntnkg/" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+
+        <article class="card" data-type="dj">
+          <div class="cardTop"><span>DJ / LIVE</span><span>MAINSTAGE</span></div>
+          <div class="cardName">閑喜 弦介 <small>(Gensuke Kanki)</small></div>
+          <a class="cardLink" href="https://www.instagram.com/gggeeennnsss/" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+
+        <article class="card" data-type="dj">
+          <div class="cardTop"><span>DJ / LIVE</span><span>MAINSTAGE</span></div>
+          <div class="cardName">HUGEN</div>
+          <a class="cardLink" href="https://www.instagram.com/hugen_tpsound/" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+
+        <article class="card" data-type="dj">
+          <div class="cardTop"><span>DJ / LIVE</span><span>MAINSTAGE</span></div>
+          <div class="cardName">manda</div>
+          <a class="cardLink" href="https://www.instagram.com/manda_info" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+
+        <!-- WORKSHOP -->
+        <article class="card" data-type="workshop">
+          <div class="cardTop"><span>WORKSHOP</span><span>DRAWING / 2F</span></div>
+          <div class="cardName">山口みいな <small>(miina yamaguchi)</small></div>
+          <a class="cardLink" href="https://www.instagram.com/miinayamaguchi/" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+
+        <article class="card" data-type="workshop">
+          <div class="cardTop"><span>WORKSHOP</span><span>KNITTING / 2F</span></div>
+          <div class="cardName">kimberley cookey-gam</div>
+          <a class="cardLink" href="https://www.instagram.com/crochetcookey/" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+
+        <article class="card" data-type="workshop">
+          <div class="cardTop"><span>WORKSHOP</span><span>KITE / ROOFTOP</span></div>
+          <div class="cardName">下田 悠太 <small>(yuta shimoda)</small></div>
+          <a class="cardLink" href="https://www.instagram.com/yuta.origami/" target="_blank" rel="noopener">Instagram →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- TICKET section after artists (no PEATIX pill) -->
+    <section id="ticket" class="ticketSection">
+      <div class="label">/ TICKET</div>
+      <div class="venueText">チケットはPEATIXにて販売予定。</div>
+      <div class="ticketCta">
+        <!-- TODO: PEATIXのイベントURLに差し替え -->
+        <a class="ticketBig" href="https://peatix.com/" target="_blank" rel="noopener">BUY TICKET</a>
+      </div>
+    </section>
+
+    <!-- ACCESS -->
+    <section id="access" style="margin-top:18px;">
+      <div class="label">/ ACCESS</div>
+      <div class="venueText">旧山叶工場（富士吉田市）
+山梨県富士吉田市下吉田２丁目１６−１９(旧山叶)
+      </div>
+
+      <iframe
+        class="map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12993.997714132607!2d138.7956139650328!3d35.49192703324804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601967bd6e36f81d%3A0x13823eb19dd4bab2!2sFUJI%20TEXTILE%20WEEK!5e0!3m2!1sen!2sjp!4v1769070485574!5m2!1sen!2sjp"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <footer id="footer">
+      <span>© yamakano biyori / 山叶日和 実行委員会</span>
+      <a class="ig" href="https://instagram.com/yamakanoniyori_fujiyoshida" target="_blank" rel="noopener">instagram</a>
+    </footer>
+  </main>
+
+  
+  <script src="script.js" defer></script>
+</body>
+</html>
