@@ -12,68 +12,108 @@
 
   <style>
     :root{
-      --bg: #cfdbe6;
       --ink:#0b0b0c;
-      --muted: rgba(11,11,12,.70);
-      --line: rgba(11,11,12,.18);
+      --muted: rgba(11,11,12,.62);
+      --line: rgba(11,11,12,.22);
 
-      --wrap: 1040px;
+      --wrap: 1120px;
       --pad: 18px;
 
       --pill: 999px;
+
+      /* background cycle */
+      --c1:#5A8EC5;
+      --c2:#CBD7E5;
+      --c3:#C6C97E;
+      --cycle: 10s;
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
-      font-family:"Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
-      background: var(--bg);
       color: var(--ink);
+      font-family:"Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
       overflow-x:hidden;
+
+      /* ✅ 一面ベタ色が時間で移り変わる */
+      background: var(--c2);
+      animation: bgcycle var(--cycle) linear infinite;
     }
+
+    @keyframes bgcycle{
+      0%   { background: var(--c1); }
+      25%  { background: var(--c2); }
+      50%  { background: var(--c3); }
+      75%  { background: var(--c2); }
+      100% { background: var(--c1); }
+    }
+
     a{ color:inherit; text-decoration:none; }
     strong{ font-weight:900; }
-
-    /* ===== slow background drift (復活) ===== */
-    body::before{
-      content:"";
-      position:fixed; inset:-20%;
-      pointer-events:none;
-      background:
-        radial-gradient(1200px 800px at 20% 20%, rgba(255,255,255,0.22), rgba(255,255,255,0) 55%),
-        radial-gradient(1000px 700px at 80% 30%, rgba(120,160,255,0.18), rgba(255,255,255,0) 60%),
-        radial-gradient(900px 700px at 40% 85%, rgba(180,120,255,0.12), rgba(255,255,255,0) 62%);
-      animation:bgdrift 24s ease-in-out infinite;
-      transform: translate3d(0,0,0);
-      z-index:-1;
-      opacity:.9;
-    }
-    @keyframes bgdrift{
-      0%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
-      50%{ transform: translate3d( 2%,  1%, 0) scale(1.03); }
-      100%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
-    }
 
     /* ===== layout ===== */
     .wrap{
       width:min(var(--wrap), 100%);
       margin:0 auto;
       padding: 0 var(--pad);
-      padding-top: 14px;
-      padding-bottom: 84px;
+      padding-bottom: 90px;
     }
 
-    /* セクション間隔を広げる */
-    section{ margin-top: 46px; }
+    /* ✅ 各セクションの間隔を広げる */
+    section{ margin-top: 56px; }
 
     .label{
-      font-size:12px;
-      letter-spacing:.16em;
-      font-weight:700;
+      font-size: 12px;
+      letter-spacing: .16em;
+      font-weight: 900;
       color: var(--muted);
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       text-transform: uppercase;
+    }
+
+    /* ===== top nav (小さく / 1列 / 背景なし) ===== */
+    .topNav{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+
+      display:flex;
+      align-items:center;
+      gap: 18px;
+
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+
+      padding: 16px 0 10px;
+
+      /* ✅ 背景なし */
+      background: transparent;
+      backdrop-filter: none;
+    }
+    .topNav::-webkit-scrollbar{ height: 6px; }
+    .topNav::-webkit-scrollbar-thumb{ background: rgba(11,11,12,.16); border-radius: 999px; }
+
+    .topNav a{
+      font-size: 12px;
+      letter-spacing: .12em;
+      font-weight: 900;
+      color: rgba(11,11,12,.78);
+      text-transform: uppercase;
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 560px){
+      .topNav{
+        gap: 14px;
+        padding: 14px 0 8px;
+      }
+      .topNav a{
+        font-size: 10px;          /* ✅ スマホで小さく */
+        letter-spacing: .10em;
+      }
     }
 
     /* ===== floating ticket ===== */
@@ -87,7 +127,6 @@
       align-items:flex-end;
       gap:10px;
       user-select:none;
-      pointer-events:auto;
     }
     .floatTicket .tag{
       font-size: 12px;
@@ -114,97 +153,66 @@
       .floatTicket a{ width: 200px; height: 58px; font-size:14px; }
     }
 
-    /* ===== top nav（重なり修正：折り返さない + 横スクロール） ===== */
-    .topNav{
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display:flex;
-      align-items:center;
-      gap: 14px;
-      flex-wrap: nowrap;          /* 2段にならない */
-      white-space: nowrap;        /* 改行しない */
-      overflow-x: auto;           /* 足りない分は横スクロール */
-      -webkit-overflow-scrolling: touch;
-      padding: 10px 0 12px;
-      background: color-mix(in srgb, var(--bg) 86%, transparent);
-      backdrop-filter: blur(10px);
-    }
-    .topNav::-webkit-scrollbar{ height: 6px; }
-    .topNav::-webkit-scrollbar-thumb{ background: rgba(11,11,12,.18); border-radius: 999px; }
-    .topNav a{
-      font-size: 12px;
-      letter-spacing:.12em;
-      font-weight:700;
-      color: rgba(11,11,12,.70);
-      padding: 6px 8px;
-      border-radius: 10px;
-      text-transform: uppercase;
-      flex: 0 0 auto;
-    }
-
-    /* ===== hero ===== */
+    /* ===== hero (PCは画像くらい、スマホは2/3くらいに) ===== */
     .hero{
-      margin-top: 18px;
+      margin-top: 22px;
       display:grid;
       grid-template-columns: 1fr auto;
-      gap: 18px;
-      align-items:end;
-    }
-    @media (max-width: 720px){
-      .hero{ grid-template-columns: 1fr; }
+      gap: 22px;
+      align-items: start; /* ✅ 日付/場所を上に */
     }
 
     .brand .title{
       font-weight: 900;
-      letter-spacing: .00em;
+      letter-spacing: -0.01em;
       text-transform: uppercase;
-      line-height: .86;
-      font-size: 156px;  /* ← でかく（要望：今の3倍くらい） */
+      line-height: .88;
+
+      /* ✅ PCは大きめ、全体バランスは画像寄せ */
+      font-size: clamp(72px, 6.4vw, 116px);
     }
-    @media (max-width: 720px){
+
+    /* ✅ スマホは “大きすぎ” 対策で 2/3 くらいに */
+    @media (max-width: 560px){
       .brand .title{
-        font-size: 132px; /* スマホでも大きく */
-        line-height: .86;
-      }
-    }
-    @media (max-width: 420px){
-      .brand .title{
-        font-size: 118px; /* 超狭い端末調整 */
-        line-height: .88;
+        font-size: clamp(48px, 12vw, 82px);
+        line-height: .90;
       }
     }
 
     .brand .sub{
-      margin-top: 16px;
-      font-size: 14px;
-      font-weight: 700;
-      color: rgba(11,11,12,.62);
-      letter-spacing: .12em;
+      margin-top: 18px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      color: rgba(11,11,12,.70);
     }
 
     .meta{
       text-align:right;
-      padding-bottom: 8px;
-    }
-    @media (max-width: 720px){
-      .meta{ text-align:left; }
+      padding-top: 4px;
     }
     .meta .date{
-      font-size: 18px;
+      font-size: clamp(28px, 3.2vw, 54px);
       font-weight: 900;
-      letter-spacing: .06em;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      line-height: 1.0;
     }
     .meta .place{
-      margin-top: 6px;
-      font-size: 12px;
-      letter-spacing: .12em;
-      color: rgba(11,11,12,.60);
-      font-weight: 700;
-      text-transform: uppercase;
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      color: rgba(11,11,12,.72);
     }
 
-    /* YAMAKANO を狭い画面で YAMA / KANO にする */
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+      .meta{ text-align:left; }
+    }
+
+    /* ✅ YAMAKANO を狭い画面で YAMA / KANO に */
     .yamano-split{ display:none; }
     .yamano-inline{ display:inline; }
     @media (max-width: 520px){
@@ -214,29 +222,34 @@
 
     /* ===== intro / big ===== */
     .intro{
-      margin-top: 24px;
-      font-size: 13px;
-      line-height: 1.9;
+      margin-top: 26px;
+      font-size: 15px;             /* ✅ 全体的に小さすぎたのでUP */
+      line-height: 1.95;
       color: rgba(11,11,12,.78);
     }
+
     .big{
-      margin-top: 28px;
+      margin-top: 34px;
       font-weight: 900;
-      letter-spacing: .08em;
-      font-size: 22px;
-      line-height: 1.25;
+      letter-spacing: .06em;
+      font-size: clamp(26px, 3.2vw, 52px); /* ✅ 画像の見出し感 */
+      line-height: 1.08;
       text-transform: uppercase;
     }
 
-    /* ===== remove the rule under EVENT DETAILS（罫線いらない） ===== */
-    .rule{ display:none; }
+    .divider{
+      height: 1px;
+      background: rgba(11,11,12,.35);
+      margin-top: 12px;
+    }
 
     /* ===== twoCol ===== */
     .twoCol{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      gap: 28px;
       align-items:start;
+      margin-top: 22px;
     }
     @media (max-width: 860px){
       .twoCol{ grid-template-columns: 1fr; }
@@ -245,47 +258,53 @@
     .eventRows{
       display:grid;
       gap: 12px;
-      padding-top: 4px;
+      padding-top: 2px;
     }
     .row{
       display:grid;
-      grid-template-columns: 110px 1fr;
-      gap: 10px;
+      grid-template-columns: 120px 1fr;
+      gap: 14px;
       align-items: baseline;
       padding: 8px 0;
-      border-bottom: none; /* ← EVENT DETAILS下の罫線を消す */
+
+      /* ✅ EVENT DETAILS 下の罫線はいらない */
+      border-bottom: none;
     }
     .row .k, .row .v{
       font-weight: 900;
       letter-spacing: .10em;
       text-transform: uppercase;
+      font-size: 22px; /* ✅ 小さすぎ対策 */
+    }
+    @media (max-width: 560px){
+      .row .k, .row .v{ font-size: 18px; }
     }
 
     .venueTitle{
-      margin: 0 0 8px;
+      margin: 0 0 10px;
       font-weight: 900;
       letter-spacing: .06em;
       text-transform: uppercase;
-      font-size: 18px;
+      font-size: 22px;
     }
     .venueText{
-      font-size: 13px;
-      line-height: 1.9;
-      color: rgba(11,11,12,.72);
+      font-size: 15px; /* ✅ UP */
+      line-height: 1.95;
+      color: rgba(11,11,12,.76);
       white-space: pre-line;
     }
 
     .pillRow{
       display:flex;
-      gap:10px;
+      gap:12px;
       flex-wrap:wrap;
-      margin-top: 14px;
+      margin-top: 16px;
     }
     .pill{
-      border: 1px solid rgba(11,11,12,.22);
+      border: 1px solid rgba(11,11,12,.24);
       background: rgba(255,255,255,.18);
       border-radius: var(--pill);
-      padding: 10px 14px;
+      padding: 12px 16px;
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .10em;
@@ -296,59 +315,32 @@
     .conceptGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 22px;
+      gap: 32px;
       align-items:start;
-      margin-top: 6px;
+      margin-top: 8px;
     }
     @media (max-width: 860px){
       .conceptGrid{ grid-template-columns: 1fr; }
     }
 
-    /* 枠は要らない（カード枠撤去） */
-    .vblock{
-      border: none;
-      background: transparent;
-      padding: 0;
-    }
+    /* 枠はなし */
+    .vblock{ padding: 0; margin: 0; border: none; background: transparent; }
 
     .vtitle{
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .14em;
       color: rgba(11,11,12,.55);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       text-transform: uppercase;
     }
 
-    /* 縦書き：フォントを揃える（Noto Sans JP） */
-    .vertical{
-      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-
-      display: inline-block;
-      max-width: none;
-
-      font-size: 14px;
-      line-height: 1.9;
-      letter-spacing: .08em;
-      color: rgba(11,11,12,.88);
-      user-select: text;
-      padding: 6px 4px;
-      min-height: 280px;
-    }
-    .vertical i{
-      font-style: italic;
-      color: rgba(11,11,12,.72);
-      font-weight: 700;
-    }
-
-    /* 枠内スクロール：枠線なしで “中だけスクロール” */
+    /* スクロール枠線なし */
     .vframe{
       width: 100%;
       max-width: 100%;
-      overflow: hidden;     /* ページ全体を横に広げない */
-      border: none;         /* ← 枠いらない */
+      overflow: hidden;
+      border: none;
       background: transparent;
       padding: 0;
     }
@@ -365,21 +357,43 @@
     .vscroll::-webkit-scrollbar-thumb{ background: rgba(11,11,12,.20); border-radius: 999px; }
     .vscroll::-webkit-scrollbar-track{ background: rgba(11,11,12,.06); border-radius: 999px; }
 
+    /* ✅ JP縦書きもENも同じフォント（Noto Sans JP） */
+    .vertical{
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+
+      display: inline-block;
+      max-width: none;
+
+      font-size: 15px;
+      line-height: 1.95;
+      letter-spacing: .08em;
+      color: rgba(11,11,12,.88);
+      user-select: text;
+      padding: 6px 4px;
+      min-height: 300px;
+    }
+    .vertical i{
+      font-style: italic;
+      color: rgba(11,11,12,.72);
+      font-weight: 700;
+    }
+
     .english{
-      font-size: 13px;
-      line-height: 1.9;
-      color: rgba(11,11,12,.76);
-      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif; /* ← フォント統一 */
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.95;
+      color: rgba(11,11,12,.78);
     }
     .english i{ color: rgba(11,11,12,.70); font-style: italic; }
 
-    /* concept image：枠なし */
+    /* concept image（枠なし） */
     .conceptImage{
-      margin-top: 22px;
+      margin-top: 26px;
       border: none;
       border-radius: 0;
       background: transparent;
-      overflow: visible;
     }
     .conceptImage img{
       width: 100%;
@@ -392,13 +406,13 @@
       display:flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
       margin-top: 6px;
     }
     .artistsHeader h2{
       margin: 0;
-      font-size: 36px;
+      font-size: clamp(28px, 3.4vw, 46px);
       font-weight: 900;
       letter-spacing: .06em;
       text-transform: uppercase;
@@ -412,7 +426,7 @@
     .fbtn{
       border: 1px solid rgba(11,11,12,.22);
       border-radius: var(--pill);
-      padding: 10px 14px;
+      padding: 12px 16px;
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .10em;
@@ -439,15 +453,15 @@
       .cards{ grid-template-columns: 1fr; }
     }
 
-    /* 枠線は丸みなし（要望） */
+    /* ✅ 枠線は丸みなし */
     .card{
       border: 1px solid rgba(11,11,12,.16);
-      border-radius: 0;         /* ← 角丸なし */
-      padding: 16px;
+      border-radius: 0;
+      padding: 18px;
       background: rgba(255,255,255,.14);
       display:grid;
-      gap: 10px;
-      min-height: 140px;
+      gap: 12px;
+      min-height: 150px;
     }
     .cardTop{
       display:flex;
@@ -460,7 +474,7 @@
       text-transform: uppercase;
     }
     .cardName{
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 900;
       letter-spacing: .02em;
     }
@@ -477,16 +491,15 @@
     }
     .cardLink:hover{ text-decoration: underline; }
 
-    /* ===== TICKET section：丸み枠線いらない ===== */
+    /* ===== TICKET（枠なし） ===== */
     .ticketSection{
-      margin-top: 46px;
-      border: none;            /* ← 枠線なし */
-      border-radius: 0;        /* ← 角丸なし */
-      padding: 0;              /* ← カード余白なし */
+      border: none;
+      border-radius: 0;
+      padding: 0;
       background: transparent;
     }
     .ticketCta{
-      margin-top: 14px;
+      margin-top: 16px;
       display:flex;
       gap: 12px;
       flex-wrap: wrap;
@@ -496,7 +509,7 @@
       border: 1px solid rgba(11,11,12,.30);
       border-radius: var(--pill);
       background: rgba(255,255,255,.22);
-      padding: 18px 24px;
+      padding: 18px 26px;
       font-weight: 900;
       letter-spacing: .12em;
       text-transform: uppercase;
@@ -510,19 +523,19 @@
     /* ===== map ===== */
     .map{
       width:100%;
-      height:420px;
+      height: 420px;
       border:0;
-      border-radius: 0; /* 角丸なしでもOKならここも0。角丸残したければ戻して */
-      margin-top: 14px;
+      border-radius: 0;
+      margin-top: 16px;
       background: rgba(255,255,255,.10);
     }
     @media (max-width: 560px){
       .map{ height: 320px; }
     }
 
-    /* ===== footer / IG（枠線いらない） ===== */
+    /* ===== footer / IG（枠線なし） ===== */
     footer{
-      margin-top: 52px;
+      margin-top: 56px;
       padding-top: 18px;
       border-top: 1px solid rgba(11,11,12,.14);
       display:flex;
@@ -536,9 +549,9 @@
       font-weight: 700;
     }
     footer .ig{
-      border: none;              /* ← 枠線なし */
-      background: transparent;   /* ← 背景なし */
-      padding: 0;                /* ← ピル形状撤去 */
+      border: none;
+      background: transparent;
+      padding: 0;
       text-transform: uppercase;
       letter-spacing: .12em;
       font-weight: 900;
@@ -564,6 +577,7 @@
       <a href="#access">ACCESS</a>
     </nav>
 
+    <!-- HERO (日付/場所を上に配置) -->
     <header class="hero" id="about">
       <div class="brand">
         <div class="title">
@@ -574,6 +588,7 @@
         </div>
         <div class="sub">山叶日和</div>
       </div>
+
       <div class="meta">
         <div class="date">2026.04.25</div>
         <div class="place">旧山叶工場 / 富士吉田市</div>
@@ -590,9 +605,8 @@
     <div class="big">
       YAMAKANO BIYORI 2026<br>
       / MUSIC FESTIVAL
+      <div class="divider" aria-hidden="true"></div>
     </div>
-
-    <div class="rule"></div>
 
     <!-- EVENT DETAILS -->
     <section id="details" class="twoCol">
@@ -612,7 +626,7 @@
 
         <div class="pillRow">
           <a class="pill" href="#access">GOOGLE MAP</a>
-          <!-- /VENUE 下の ARTISTS ボタンは削除（要望） -->
+          <!-- ✅ /VENUE 下の ARTISTS ボタンは無し -->
         </div>
       </div>
     </section>
@@ -623,18 +637,17 @@
 
       <div class="conceptGrid">
         <div class="vblock">
-          <!-- (Vertical) は削除（要望） -->
+          <!-- ✅ (Vertical) は無し -->
           <div class="vtitle">/ CONCEPT / JP</div>
 
-          <div class="vframe" aria-label="Concept JP vertical frame">
-            <div class="vscroll" aria-label="Concept JP vertical scroll area">
+          <div class="vframe" aria-label="Concept JP vertical area">
+            <div class="vscroll" aria-label="Concept JP vertical scroll">
               <div class="vertical">
 かつて富士吉田の街のいたるところに響いていた機織りの音。<br />
 それは、単なる産業の音ではなく、<br />人々の暮らしのリズムであり、地域の　時間　そのものでした。<br />
 織物産業が栄える上で重要な自然の音、<br />戦後産業を象徴する織機の音、<br />様々な音が交差する地点で始まる音楽祭。<br />
 この音楽祭は「音」を媒介に「地域」を体験する場に、<br />みんなでしていく場所です。<br />
-<br />
-<br />
+<br /><br />
 <i>
 日和（ひより）とは：<br />
 何かをするのにちょうどよい天気。<br />
@@ -682,7 +695,6 @@
       </div>
 
       <div class="cards" id="cards">
-        <!-- DJ / LIVE (mainstage) -->
         <article class="card" data-type="dj">
           <div class="cardTop"><span>DJ / LIVE</span><span>MAINSTAGE</span></div>
           <div class="cardName">田中堅大 <small>(Kenta Tanaka)</small></div>
@@ -707,7 +719,6 @@
           <a class="cardLink" href="https://www.instagram.com/manda_info" target="_blank" rel="noopener">Instagram →</a>
         </article>
 
-        <!-- WORKSHOP -->
         <article class="card" data-type="workshop">
           <div class="cardTop"><span>WORKSHOP</span><span>DRAWING / 2F</span></div>
           <div class="cardName">山口みいな <small>(miina yamaguchi)</small></div>
@@ -759,7 +770,7 @@
   </main>
 
   <script>
-    // ===== Artists filter (integrated) =====
+    // ===== Artists filter =====
     (function(){
       const buttons = Array.from(document.querySelectorAll('.fbtn'));
       const cards = Array.from(document.querySelectorAll('#cards .card'));
