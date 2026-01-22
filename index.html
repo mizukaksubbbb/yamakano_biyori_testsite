@@ -12,146 +12,183 @@
 
   <style>
     :root{
-      /* you can tweak */
-      --bg: #cfdbe6;         /* スクショの薄いブルー寄せ */
-      --ink:#0b0b0c;         /* 文字 */
-      --muted: rgba(11,11,12,.72);
+      --bg: #cfdbe6;
+      --ink:#0b0b0c;
+      --muted: rgba(11,11,12,.70);
       --line: rgba(11,11,12,.18);
 
       --wrap: 1040px;
       --pad: 18px;
 
-      --r: 18px;
       --pill: 999px;
-
-      --navH: 44px;
     }
 
-    *{ box-sizing: border-box; }
-    html, body { height: 100%; }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
-      margin: 0;
-      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
+      margin:0;
+      font-family:"Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
       background: var(--bg);
       color: var(--ink);
-      overflow-x: hidden; /* ページ全体の横はみ出しを防ぐ */
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    strong{ font-weight:900; }
+
+    /* ===== slow background drift (復活) ===== */
+    body::before{
+      content:"";
+      position:fixed; inset:-20%;
+      pointer-events:none;
+      background:
+        radial-gradient(1200px 800px at 20% 20%, rgba(255,255,255,0.22), rgba(255,255,255,0) 55%),
+        radial-gradient(1000px 700px at 80% 30%, rgba(120,160,255,0.18), rgba(255,255,255,0) 60%),
+        radial-gradient(900px 700px at 40% 85%, rgba(180,120,255,0.12), rgba(255,255,255,0) 62%);
+      animation:bgdrift 24s ease-in-out infinite;
+      transform: translate3d(0,0,0);
+      z-index:-1;
+      opacity:.9;
+    }
+    @keyframes bgdrift{
+      0%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+      50%{ transform: translate3d( 2%,  1%, 0) scale(1.03); }
+      100%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
     }
 
-    a{ color: inherit; text-decoration: none; }
-    strong{ font-weight: 900; }
-
-    /* ====== layout ====== */
+    /* ===== layout ===== */
     .wrap{
-      width: min(var(--wrap), 100%);
-      margin: 0 auto;
+      width:min(var(--wrap), 100%);
+      margin:0 auto;
       padding: 0 var(--pad);
       padding-top: 14px;
-      padding-bottom: 70px;
+      padding-bottom: 84px;
     }
 
-    .rule{
-      height: 1px;
-      background: var(--line);
-      margin: 22px 0;
-    }
+    /* セクション間隔を広げる */
+    section{ margin-top: 46px; }
 
     .label{
-      font-size: 12px;
-      letter-spacing: .16em;
-      font-weight: 700;
+      font-size:12px;
+      letter-spacing:.16em;
+      font-weight:700;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       text-transform: uppercase;
     }
 
-    /* ====== floating ticket ====== */
+    /* ===== floating ticket ===== */
     .floatTicket{
       position: fixed;
       right: 14px;
-      bottom: 18vh; /* “上すぎる”対策で少し下に */
+      bottom: 16vh;
       z-index: 50;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      user-select: none;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:10px;
+      user-select:none;
+      pointer-events:auto;
     }
     .floatTicket .tag{
       font-size: 12px;
-      letter-spacing: .16em;
-      color: rgba(11,11,12,.55);
+      letter-spacing:.16em;
+      color: rgba(11,11,12,.45);
+      text-transform: uppercase;
     }
     .floatTicket a{
-      width: 220px;
-      height: 64px;
+      width: 240px;
+      height: 66px;
       border-radius: var(--pill);
       border: 1px solid rgba(11,11,12,.35);
       background: rgba(255,255,255,.22);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      letter-spacing: .10em;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform: uppercase;
       backdrop-filter: blur(6px);
     }
     @media (max-width: 560px){
-      .floatTicket{ right: 12px; bottom: 16vh; }
-      .floatTicket a{ width: 190px; height: 58px; font-size: 14px; }
+      .floatTicket{ right: 12px; bottom: 14vh; }
+      .floatTicket a{ width: 200px; height: 58px; font-size:14px; }
     }
 
-    /* ====== top nav ====== */
+    /* ===== top nav（重なり修正：折り返さない + 横スクロール） ===== */
     .topNav{
       position: sticky;
       top: 0;
       z-index: 20;
-      height: var(--navH);
-      display: flex;
-      align-items: center;
+      display:flex;
+      align-items:center;
       gap: 14px;
-      flex-wrap: wrap;
-      padding: 10px 0;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid transparent;
+      flex-wrap: nowrap;          /* 2段にならない */
+      white-space: nowrap;        /* 改行しない */
+      overflow-x: auto;           /* 足りない分は横スクロール */
+      -webkit-overflow-scrolling: touch;
+      padding: 10px 0 12px;
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(10px);
     }
+    .topNav::-webkit-scrollbar{ height: 6px; }
+    .topNav::-webkit-scrollbar-thumb{ background: rgba(11,11,12,.18); border-radius: 999px; }
     .topNav a{
       font-size: 12px;
-      letter-spacing: .12em;
-      font-weight: 700;
-      color: rgba(11,11,12,.72);
+      letter-spacing:.12em;
+      font-weight:700;
+      color: rgba(11,11,12,.70);
       padding: 6px 8px;
       border-radius: 10px;
-    }
-    .topNav a:hover{
-      background: rgba(255,255,255,.28);
-      color: rgba(11,11,12,.9);
+      text-transform: uppercase;
+      flex: 0 0 auto;
     }
 
-    /* ====== hero ====== */
+    /* ===== hero ===== */
     .hero{
-      margin-top: 12px;
-      display: grid;
+      margin-top: 18px;
+      display:grid;
       grid-template-columns: 1fr auto;
-      gap: 16px;
-      align-items: end;
+      gap: 18px;
+      align-items:end;
     }
+    @media (max-width: 720px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+
     .brand .title{
       font-weight: 900;
-      letter-spacing: .02em;
-      font-size: 54px;
-      line-height: 0.95;
+      letter-spacing: .00em;
       text-transform: uppercase;
+      line-height: .86;
+      font-size: 156px;  /* ← でかく（要望：今の3倍くらい） */
     }
+    @media (max-width: 720px){
+      .brand .title{
+        font-size: 132px; /* スマホでも大きく */
+        line-height: .86;
+      }
+    }
+    @media (max-width: 420px){
+      .brand .title{
+        font-size: 118px; /* 超狭い端末調整 */
+        line-height: .88;
+      }
+    }
+
     .brand .sub{
-      margin-top: 10px;
+      margin-top: 16px;
       font-size: 14px;
       font-weight: 700;
-      color: rgba(11,11,12,.68);
+      color: rgba(11,11,12,.62);
       letter-spacing: .12em;
     }
+
     .meta{
-      text-align: right;
+      text-align:right;
       padding-bottom: 8px;
+    }
+    @media (max-width: 720px){
+      .meta{ text-align:left; }
     }
     .meta .date{
       font-size: 18px;
@@ -162,25 +199,28 @@
       margin-top: 6px;
       font-size: 12px;
       letter-spacing: .12em;
-      color: rgba(11,11,12,.65);
+      color: rgba(11,11,12,.60);
       font-weight: 700;
+      text-transform: uppercase;
     }
 
-    @media (max-width: 720px){
-      .hero{ grid-template-columns: 1fr; }
-      .meta{ text-align: left; }
-      .brand .title{ font-size: 44px; }
+    /* YAMAKANO を狭い画面で YAMA / KANO にする */
+    .yamano-split{ display:none; }
+    .yamano-inline{ display:inline; }
+    @media (max-width: 520px){
+      .yamano-inline{ display:none; }
+      .yamano-split{ display:inline; }
     }
 
-    /* ====== intro / big ====== */
+    /* ===== intro / big ===== */
     .intro{
-      margin-top: 16px;
+      margin-top: 24px;
       font-size: 13px;
-      line-height: 1.8;
-      color: rgba(11,11,12,.8);
+      line-height: 1.9;
+      color: rgba(11,11,12,.78);
     }
     .big{
-      margin-top: 16px;
+      margin-top: 28px;
       font-weight: 900;
       letter-spacing: .08em;
       font-size: 22px;
@@ -188,37 +228,34 @@
       text-transform: uppercase;
     }
 
-    /* ====== twoCol ====== */
+    /* ===== remove the rule under EVENT DETAILS（罫線いらない） ===== */
+    .rule{ display:none; }
+
+    /* ===== twoCol ===== */
     .twoCol{
-      display: grid;
+      display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
-      align-items: start;
+      align-items:start;
     }
     @media (max-width: 860px){
       .twoCol{ grid-template-columns: 1fr; }
     }
 
     .eventRows{
-      display: grid;
-      gap: 10px;
+      display:grid;
+      gap: 12px;
       padding-top: 4px;
     }
     .row{
-      display: grid;
+      display:grid;
       grid-template-columns: 110px 1fr;
       gap: 10px;
       align-items: baseline;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(11,11,12,.10);
+      padding: 8px 0;
+      border-bottom: none; /* ← EVENT DETAILS下の罫線を消す */
     }
-    .row:last-child{ border-bottom: none; }
-    .row .k{
-      font-weight: 900;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-    }
-    .row .v{
+    .row .k, .row .v{
       font-weight: 900;
       letter-spacing: .10em;
       text-transform: uppercase;
@@ -229,23 +266,24 @@
       font-weight: 900;
       letter-spacing: .06em;
       text-transform: uppercase;
+      font-size: 18px;
     }
     .venueText{
       font-size: 13px;
-      line-height: 1.8;
-      color: rgba(11,11,12,.75);
+      line-height: 1.9;
+      color: rgba(11,11,12,.72);
       white-space: pre-line;
     }
 
     .pillRow{
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 14px;
     }
     .pill{
-      border: 1px solid rgba(11,11,12,.25);
-      background: rgba(255,255,255,.22);
+      border: 1px solid rgba(11,11,12,.22);
+      background: rgba(255,255,255,.18);
       border-radius: var(--pill);
       padding: 10px 14px;
       font-size: 12px;
@@ -254,70 +292,40 @@
       text-transform: uppercase;
     }
 
-    /* ====== CONCEPT ====== */
-    .conceptWrap{
-      margin-top: 10px;
-    }
+    /* ===== CONCEPT ===== */
     .conceptGrid{
-      display: grid;
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      align-items: start;
+      gap: 22px;
+      align-items:start;
+      margin-top: 6px;
     }
     @media (max-width: 860px){
       .conceptGrid{ grid-template-columns: 1fr; }
     }
 
+    /* 枠は要らない（カード枠撤去） */
     .vblock{
-      border: 1px solid rgba(11,11,12,.16);
-      border-radius: var(--r);
-      padding: 14px;
-      background: rgba(255,255,255,.16);
+      border: none;
+      background: transparent;
+      padding: 0;
     }
+
     .vtitle{
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .14em;
-      color: rgba(11,11,12,.6);
-      margin-bottom: 10px;
+      color: rgba(11,11,12,.55);
+      margin-bottom: 12px;
       text-transform: uppercase;
     }
 
-    /* ✅ ここが修正点：縦書きを “枠内横スクロール” に閉じ込める */
-    .vframe{
-      width: 100%;
-      max-width: 100%;
-      overflow: hidden;                 /* ページ全体を広げない */
-      border: 1px solid rgba(11,11,12,.12);
-      border-radius: 14px;
-      padding: 10px;
-      background: rgba(255,255,255,.12);
-    }
-    .vscroll{
-      width: 100%;
-      max-width: 100%;
-      overflow-x: auto;                 /* 枠内だけ横スクロール */
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-gutter: stable both-edges;
-      padding-bottom: 8px;              /* スクロールバー分 */
-    }
-    .vscroll::-webkit-scrollbar{ height: 8px; }
-    .vscroll::-webkit-scrollbar-thumb{
-      background: rgba(11,11,12,.22);
-      border-radius: 999px;
-    }
-    .vscroll::-webkit-scrollbar-track{
-      background: rgba(11,11,12,.06);
-      border-radius: 999px;
-    }
-
+    /* 縦書き：フォントを揃える（Noto Sans JP） */
     .vertical{
-      /* 縦書きそのもの */
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif;
       writing-mode: vertical-rl;
       text-orientation: mixed;
 
-      /* 重要：中身幅で伸びる → vscrollが横スクロール */
       display: inline-block;
       max-width: none;
 
@@ -327,7 +335,7 @@
       color: rgba(11,11,12,.88);
       user-select: text;
       padding: 6px 4px;
-      min-height: 260px;
+      min-height: 280px;
     }
     .vertical i{
       font-style: italic;
@@ -335,72 +343,94 @@
       font-weight: 700;
     }
 
+    /* 枠内スクロール：枠線なしで “中だけスクロール” */
+    .vframe{
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;     /* ページ全体を横に広げない */
+      border: none;         /* ← 枠いらない */
+      background: transparent;
+      padding: 0;
+    }
+    .vscroll{
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-gutter: stable both-edges;
+      padding-bottom: 8px;
+    }
+    .vscroll::-webkit-scrollbar{ height: 8px; }
+    .vscroll::-webkit-scrollbar-thumb{ background: rgba(11,11,12,.20); border-radius: 999px; }
+    .vscroll::-webkit-scrollbar-track{ background: rgba(11,11,12,.06); border-radius: 999px; }
+
     .english{
       font-size: 13px;
-      line-height: 1.8;
-      color: rgba(11,11,12,.78);
+      line-height: 1.9;
+      color: rgba(11,11,12,.76);
+      font-family: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Segoe UI", Arial, sans-serif; /* ← フォント統一 */
     }
-    .english i{
-      color: rgba(11,11,12,.70);
-      font-style: italic;
-    }
+    .english i{ color: rgba(11,11,12,.70); font-style: italic; }
 
-    /* concept image */
+    /* concept image：枠なし */
     .conceptImage{
-      margin-top: 14px;
-      border: 1px solid rgba(11,11,12,.16);
-      border-radius: var(--r);
-      overflow: hidden;
-      background: rgba(255,255,255,.14);
+      margin-top: 22px;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      overflow: visible;
     }
     .conceptImage img{
       width: 100%;
       height: auto;
-      display: block;
+      display:block;
     }
 
-    /* ====== ARTISTS ====== */
+    /* ===== ARTISTS ===== */
     .artistsHeader{
-      display: flex;
+      display:flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 12px;
+      margin-top: 6px;
     }
     .artistsHeader h2{
       margin: 0;
-      font-size: 22px;
+      font-size: 36px;
       font-weight: 900;
-      letter-spacing: .10em;
+      letter-spacing: .06em;
       text-transform: uppercase;
     }
+
     .filters{
-      display: flex;
-      gap: 8px;
+      display:flex;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .fbtn{
-      border: 1px solid rgba(11,11,12,.25);
+      border: 1px solid rgba(11,11,12,.22);
       border-radius: var(--pill);
-      padding: 9px 12px;
+      padding: 10px 14px;
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .10em;
-      background: rgba(255,255,255,.20);
+      background: rgba(255,255,255,.18);
       cursor: pointer;
+      text-transform: uppercase;
     }
     .fbtn[aria-pressed="true"]{
-      background: rgba(11,11,12,.85);
+      background: rgba(11,11,12,.86);
       color: #fff;
-      border-color: rgba(11,11,12,.85);
+      border-color: rgba(11,11,12,.86);
     }
 
     .cards{
-      margin-top: 14px;
-      display: grid;
+      margin-top: 18px;
+      display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
     @media (max-width: 960px){
       .cards{ grid-template-columns: repeat(2, 1fr); }
@@ -409,23 +439,24 @@
       .cards{ grid-template-columns: 1fr; }
     }
 
+    /* 枠線は丸みなし（要望） */
     .card{
       border: 1px solid rgba(11,11,12,.16);
-      border-radius: var(--r);
-      padding: 14px;
-      background: rgba(255,255,255,.16);
-      display: grid;
+      border-radius: 0;         /* ← 角丸なし */
+      padding: 16px;
+      background: rgba(255,255,255,.14);
+      display:grid;
       gap: 10px;
       min-height: 140px;
     }
     .cardTop{
-      display: flex;
+      display:flex;
       justify-content: space-between;
       gap: 10px;
       font-size: 11px;
       font-weight: 900;
       letter-spacing: .12em;
-      color: rgba(11,11,12,.6);
+      color: rgba(11,11,12,.55);
       text-transform: uppercase;
     }
     .cardName{
@@ -435,140 +466,84 @@
     }
     .cardName small{
       font-weight: 700;
-      color: rgba(11,11,12,.65);
+      color: rgba(11,11,12,.62);
     }
     .cardLink{
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .10em;
-      color: rgba(11,11,12,.78);
+      color: rgba(11,11,12,.72);
       text-transform: uppercase;
     }
     .cardLink:hover{ text-decoration: underline; }
 
-    /* ====== Ticket section ====== */
+    /* ===== TICKET section：丸み枠線いらない ===== */
     .ticketSection{
-      margin-top: 18px;
-      border: 1px solid rgba(11,11,12,.16);
-      border-radius: var(--r);
-      padding: 14px;
-      background: rgba(255,255,255,.16);
+      margin-top: 46px;
+      border: none;            /* ← 枠線なし */
+      border-radius: 0;        /* ← 角丸なし */
+      padding: 0;              /* ← カード余白なし */
+      background: transparent;
     }
     .ticketCta{
-      margin-top: 12px;
-      display: flex;
+      margin-top: 14px;
+      display:flex;
       gap: 12px;
       flex-wrap: wrap;
-      align-items: center;
+      align-items:center;
     }
     .ticketBig{
       border: 1px solid rgba(11,11,12,.30);
       border-radius: var(--pill);
       background: rgba(255,255,255,.22);
-      padding: 18px 22px;
+      padding: 18px 24px;
       font-weight: 900;
       letter-spacing: .12em;
       text-transform: uppercase;
-      font-size: 18px; /* 1.5倍相当 */
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 220px;
+      font-size: 18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width: 240px;
     }
 
-    /* ====== map ====== */
+    /* ===== map ===== */
     .map{
-      width: 100%;
-      height: 420px;
-      border: 0;
-      border-radius: var(--r);
-      margin-top: 12px;
-      box-shadow: 0 0 0 1px rgba(11,11,12,.12) inset;
+      width:100%;
+      height:420px;
+      border:0;
+      border-radius: 0; /* 角丸なしでもOKならここも0。角丸残したければ戻して */
+      margin-top: 14px;
       background: rgba(255,255,255,.10);
     }
     @media (max-width: 560px){
       .map{ height: 320px; }
     }
 
-    /* ====== footer ====== */
+    /* ===== footer / IG（枠線いらない） ===== */
     footer{
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-      display: flex;
-      align-items: center;
+      margin-top: 52px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(11,11,12,.14);
+      display:flex;
+      align-items:center;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      color: rgba(11,11,12,.62);
+      color: rgba(11,11,12,.58);
       font-size: 12px;
       letter-spacing: .08em;
       font-weight: 700;
     }
     footer .ig{
-      padding: 8px 10px;
-      border: 1px solid rgba(11,11,12,.18);
-      border-radius: var(--pill);
-      background: rgba(255,255,255,.18);
+      border: none;              /* ← 枠線なし */
+      background: transparent;   /* ← 背景なし */
+      padding: 0;                /* ← ピル形状撤去 */
       text-transform: uppercase;
       letter-spacing: .12em;
       font-weight: 900;
-      color: rgba(11,11,12,.75);
+      color: rgba(11,11,12,.70);
     }
-
-    /* ===== Hero title responsive split ===== */
-
-/* デフォルト（PC）：YAMAKANO を1行表示 */
-.yamano-split{
-  display: none;
-}
-.yamano-inline{
-  display: inline;
-}
-
-/* 狭い画面だけ分割 */
-@media (max-width: 420px){
-  .yamano-inline{
-    display: none;
-  }
-  .yamano-split{
-    display: inline;
-  }
-
-  /* 念のため文字サイズも微調整（はみ出し防止） */
-  .brand .title{
-    font-size: 46px;
-    line-height: 0.98;
-  }
-}
-/* ===== REMOVE CONCEPT BOX FRAMES ===== */
-
-/* JP / EN 両方の外枠を消す */
-.vblock{
-  border: none;
-  background: transparent;
-  padding: 0;        /* 枠用の余白も消す */
-}
-
-/* JP縦書きの内側フレームも消す */
-.vframe{
-  border: none;
-  background: transparent;
-  padding: 0;
-}
-
-/* スクロール自体は残す（挙動維持） */
-.vscroll{
-  padding-bottom: 8px; /* スクロール操作性のため少しだけ残す */
-}
-
-/* コンセプト下の画像も“ベタ置き”に */
-.conceptImage{
-  border: none;
-  background: transparent;
-  border-radius: 0;
-}
-
   </style>
 </head>
 
@@ -576,7 +551,6 @@
   <!-- floating ticket -->
   <div class="floatTicket" id="floatTicket" aria-label="Ticket">
     <div class="tag">/ Peatix</div>
-    <!-- TODO: ここをイベントのPEATIX URLに差し替え -->
     <a href="https://peatix.com/" target="_blank" rel="noopener">BUY TICKET</a>
   </div>
 
@@ -592,16 +566,18 @@
 
     <header class="hero" id="about">
       <div class="brand">
-  <div class="title">
-    <span class="yamano-inline">YAMAKANO</span>
-    <span class="yamano-split">
-      YAMA<br>KANO
-    </span><br>
-    BIYORI<br>
-    2026
-  </div>
-  <div class="sub">山叶日和</div>
-</div>
+        <div class="title">
+          <span class="yamano-inline">YAMAKANO</span>
+          <span class="yamano-split">YAMA<br>KANO</span><br>
+          BIYORI<br>
+          2026
+        </div>
+        <div class="sub">山叶日和</div>
+      </div>
+      <div class="meta">
+        <div class="date">2026.04.25</div>
+        <div class="place">旧山叶工場 / 富士吉田市</div>
+      </div>
     </header>
 
     <section class="intro">
@@ -636,7 +612,7 @@
 
         <div class="pillRow">
           <a class="pill" href="#access">GOOGLE MAP</a>
-          <a class="pill" href="#artists">ARTISTS</a>
+          <!-- /VENUE 下の ARTISTS ボタンは削除（要望） -->
         </div>
       </div>
     </section>
@@ -647,9 +623,9 @@
 
       <div class="conceptGrid">
         <div class="vblock">
-          <div class="vtitle">/ CONCEPT / JP (VERTICAL)</div>
+          <!-- (Vertical) は削除（要望） -->
+          <div class="vtitle">/ CONCEPT / JP</div>
 
-          <!-- ✅ 枠内スクロール化（ページ全体を横に広げない） -->
           <div class="vframe" aria-label="Concept JP vertical frame">
             <div class="vscroll" aria-label="Concept JP vertical scroll area">
               <div class="vertical">
@@ -670,8 +646,6 @@
               </div>
             </div>
           </div>
-          <!-- /枠内スクロール化 -->
-
         </div>
 
         <div class="vblock">
@@ -697,7 +671,7 @@
     </section>
 
     <!-- ARTISTS -->
-    <section id="artists" style="margin-top:20px;">
+    <section id="artists">
       <div class="artistsHeader">
         <h2>ARTISTS</h2>
         <div class="filters" role="group" aria-label="Filters">
@@ -759,13 +733,12 @@
       <div class="label">/ TICKET</div>
       <div class="venueText">チケットはPEATIXにて販売予定。</div>
       <div class="ticketCta">
-        <!-- TODO: PEATIXのイベントURLに差し替え -->
         <a class="ticketBig" href="https://peatix.com/" target="_blank" rel="noopener">BUY TICKET</a>
       </div>
     </section>
 
     <!-- ACCESS -->
-    <section id="access" style="margin-top:18px;">
+    <section id="access">
       <div class="label">/ ACCESS</div>
       <div class="venueText">旧山叶工場（富士吉田市）
 山梨県富士吉田市下吉田２丁目１６−１９(旧山叶)
@@ -786,7 +759,7 @@
   </main>
 
   <script>
-    // ===== Artists filter (script.js integrated) =====
+    // ===== Artists filter (integrated) =====
     (function(){
       const buttons = Array.from(document.querySelectorAll('.fbtn'));
       const cards = Array.from(document.querySelectorAll('#cards .card'));
@@ -811,7 +784,6 @@
         });
       });
 
-      // initial
       applyFilter('all');
     })();
   </script>
