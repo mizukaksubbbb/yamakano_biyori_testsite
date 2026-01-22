@@ -541,6 +541,33 @@
     line-height: 0.98;
   }
 }
+/* ===== REMOVE CONCEPT BOX FRAMES ===== */
+
+/* JP / EN 両方の外枠を消す */
+.vblock{
+  border: none;
+  background: transparent;
+  padding: 0;        /* 枠用の余白も消す */
+}
+
+/* JP縦書きの内側フレームも消す */
+.vframe{
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+/* スクロール自体は残す（挙動維持） */
+.vscroll{
+  padding-bottom: 8px; /* スクロール操作性のため少しだけ残す */
+}
+
+/* コンセプト下の画像も“ベタ置き”に */
+.conceptImage{
+  border: none;
+  background: transparent;
+  border-radius: 0;
+}
 
   </style>
 </head>
